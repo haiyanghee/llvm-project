@@ -8256,6 +8256,11 @@ void __kmp_cleanup(void) {
   __kmp_stats_fini();
 #endif
 
+#ifdef KMP_TDATA_GTID
+  /*reset __kmp_gtid to initial value*/
+  __kmp_gtid = KMP_GTID_DNE;
+#endif
+
   KA_TRACE(10, ("__kmp_cleanup: exit\n"));
 }
 
