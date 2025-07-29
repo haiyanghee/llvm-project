@@ -6889,8 +6889,12 @@ void __kmp_unregister_library(void) {
   if (fd1 == -1) {
     // File did not open. Try the temporary file.
     use_shm = false;
-    KMP_DEBUG_ASSERT(temp_reg_status_file_name);
-    fd1 = open(temp_reg_status_file_name, O_RDONLY);
+    // If we reach here, we do not assert that temp_reg_status_file_name is not
+    // NULL It's possible that we just forked and temp_reg_status_file_name is
+    // null in the parent Since the forked child process's pid is different, the
+    // shm_name shared memory file will not be opened, and we'll reach to here
+    if (temp_reg_status_file_name)
+      fd1 = open(temp_reg_status_file_name, O_RDONLY);
     if (fd1 == -1) {
       // give it up now.
       return;
